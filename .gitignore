@@ -1,0 +1,12 @@
+﻿/src/.vs
+/src/Challenge/.vs
+/src/Challenge/Challenge.API/bin
+/src/Challenge/Challenge.API/obj
+/src/Challenge/Challenge.Business/bin
+/src/Challenge/Challenge.Business/obj
+/src/Challenge/Challenge.Domain/bin
+/src/Challenge/Challenge.Domain/obj
+/src/Challenge/Challenge.Tests/Challenge.Domain.Tests/bin
+/src/Challenge/Challenge.Tests/Challenge.Domain.Tests/obj
+/src/Challenge/Challenge.Tests/Challenge.API.Tests/bin
+/src/Challenge/Challenge.Tests/Challenge.API.Tests/obj
