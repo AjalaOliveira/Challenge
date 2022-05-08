@@ -39,7 +39,7 @@ namespace Challenge.Business.Services
         private static void ValidateTotalIncome(PersonDTO person)
         {
             if (person.FamilyData.TotalIncome < 0)
-                throw new Exception($"Nome: {person.FullName}. O valor da renda total da família não pode ser menor que zero!");
+                throw new Exception(ErrorMessage.InvalidaTotalIncomeError(person.FullName));
         }
 
         private static void ValidateApplicant(PersonDTO person)
@@ -80,9 +80,9 @@ namespace Challenge.Business.Services
             return false;
         }
 
-        private static void ReturnError(string fullName)
+        private static void ReturnError(string applicantFullName)
         {
-            throw new Exception($"Nome: {fullName}. Já existe um pretendente dessa família!");
+            throw new Exception(ErrorMessage.FamilyAlreadyHasApplicantError(applicantFullName));
         }
 
         private static int CalculateScore(PersonDTO person)

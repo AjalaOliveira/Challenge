@@ -855,7 +855,7 @@ namespace Challenge.API.Tests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            Assert.Contains("nomeCompleto", responseData.ToString());
+            Assert.Contains(ErrorMessage.FullNameError, responseData.ToString());
         }
 
         [Fact]
@@ -896,7 +896,7 @@ namespace Challenge.API.Tests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            Assert.Contains("numeroDocumento", responseData.ToString());
+            Assert.Contains(ErrorMessage.DocumentError, responseData.ToString());
         }
 
         [Fact]
@@ -937,7 +937,7 @@ namespace Challenge.API.Tests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            Assert.Contains("nomeCompleto", responseData.ToString());
+            Assert.Contains(ErrorMessage.FullNameError, responseData.ToString());
         }
 
         [Fact]
@@ -978,7 +978,7 @@ namespace Challenge.API.Tests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            Assert.Contains("numeroDocumento", responseData.ToString());
+            Assert.Contains(ErrorMessage.DocumentError, responseData.ToString());
         }
 
         [Fact]
@@ -1019,7 +1019,7 @@ namespace Challenge.API.Tests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            Assert.Contains("nomeCompleto", responseData.ToString());
+            Assert.Contains(ErrorMessage.FullNameError, responseData.ToString());
         }
 
         [Fact]
@@ -1060,7 +1060,7 @@ namespace Challenge.API.Tests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            Assert.Contains("numeroDocumento", responseData.ToString());
+            Assert.Contains(ErrorMessage.DocumentError, responseData.ToString());
         }
 
         [Fact]
@@ -1101,7 +1101,7 @@ namespace Challenge.API.Tests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            Assert.Contains("dataNascimento", responseData.ToString());
+            Assert.Contains(ErrorMessage.BirthDateError, responseData.ToString());
         }
 
         [Fact]
@@ -1126,7 +1126,7 @@ namespace Challenge.API.Tests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            Assert.Contains("rendaFamiliar", responseData.ToString());
+            Assert.Contains(ErrorMessage.TotalIncomeError, responseData.ToString());
         }
 
         [Fact]
@@ -1152,7 +1152,7 @@ namespace Challenge.API.Tests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            Assert.Equal($"Nome: {applicationFullName}. O valor da renda total da família não pode ser menor que zero!", responseData.ToString());
+            Assert.Equal(ErrorMessage.InvalidaTotalIncomeError(applicationFullName), responseData.ToString());
         }
 
         #endregion
@@ -1240,7 +1240,7 @@ namespace Challenge.API.Tests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            Assert.Equal($"Nome: {applicationFullName}. Já existe um pretendente dessa família!", responseData.ToString());
+            Assert.Equal(ErrorMessage.FamilyAlreadyHasApplicantError(applicationFullName), responseData.ToString());
         }
 
         [Fact]
@@ -1293,7 +1293,7 @@ namespace Challenge.API.Tests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            Assert.Equal($"Nome: {applicationFullName}. Já existe um pretendente dessa família!", responseData.ToString());
+            Assert.Equal(ErrorMessage.FamilyAlreadyHasApplicantError(applicationFullName), responseData.ToString());
         }
 
         [Fact]

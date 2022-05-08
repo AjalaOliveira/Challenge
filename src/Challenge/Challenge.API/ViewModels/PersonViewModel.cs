@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Challenge.Domain.Config;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Challenge.API.ViewModels
@@ -8,9 +9,8 @@ namespace Challenge.API.ViewModels
         [JsonPropertyName("conjuge")]
         public SpouseViewModel Spouse { get; set; }
 
-        [Required(ErrorMessage = "O campo '{0}' é obrigatório!")]
+        [Required(ErrorMessage = ErrorMessage.FamilyDataError)]
         [JsonPropertyName("dadosFamilia")]
-        [Display(Name = "dadosFamilia")]
         public FamilyDataViewModel FamilyData { get; set; }
     }
 }

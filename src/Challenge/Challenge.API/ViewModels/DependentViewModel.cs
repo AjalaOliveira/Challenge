@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Challenge.Domain.Config;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -6,9 +7,8 @@ namespace Challenge.API.ViewModels
 {
     public class DependentViewModel : CommonDataViewModel
     {
-        [Required(ErrorMessage = "O campo '{0}' é obrigatório!")]
+        [Required(ErrorMessage = ErrorMessage.BirthDateError)]
         [JsonPropertyName("dataNascimento")]
-        [Display(Name = "dataNascimento")]
         public DateTime? BirthDate { get; set; }
     }
 }
