@@ -27,11 +27,11 @@ namespace Challenge.API.V1
         [HttpPost]
         public async Task<IActionResult> SortListOfPeople(List<PersonViewModel> personViewModel)
         {
-            if (!ModelState.IsValid)
-                return CustomResponse(ModelState);
-
             try
             {
+                if (!ModelState.IsValid)
+                    return CustomResponse(ModelState);
+
                 var result = await _peopleService.SortListOfPeople(_mapper.Map<List<PersonDTO>>(personViewModel));
                 return CustomResponse(result);
             }
