@@ -7,6 +7,7 @@
         public const string BirthDateError = "O campo 'birthDate' é obrigatório!";
         public const string TotalIncomeError = "O campo 'totalIncome' é obrigatório!";
         public const string FamilyDataError = "O campo 'familyData' é obrigatório!";
+        public const string SpouseError = "O campo 'spouse' é obrigatório!";
 
         public static string FamilyAlreadyHasApplicantError(string applicantFullName)
         {

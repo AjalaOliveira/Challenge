@@ -17,65 +17,65 @@ namespace Challenge.Business.Services
             Applicants = new();
         }
 
-        public Task<List<PersonDTO>> SortListOfPeople(List<PersonDTO> personDTO)
+        public Task<List<ApplicantDTO>> SortListOfPeople(List<ApplicantDTO> applicantList)
         {
-            List<PersonDTO> result = new();
-            foreach (var item in personDTO)
+            List<ApplicantDTO> result = new();
+            foreach (var applicant in applicantList)
             {
-                ValidateTotalIncome(item);
-                ValidateApplicant(item);
+                ValidateTotalIncome(applicant);
+                ValidateApplicant(applicant);
 
-                if (HasValidTotalIncome(item))
-                    item.Score = CalculateScore(item);
+                if (HasValidTotalIncome(applicant))
+                    applicant.Score = CalculateScore(applicant);
                 else
-                    item.Score = 0;
-                result.Add(item);
+                    applicant.Score = 0;
+                result.Add(applicant);
             }
 
             result = GetSortedList(result);
             return Task.FromResult(result);
         }
 
-        private static void ValidateTotalIncome(PersonDTO person)
+        private static void ValidateTotalIncome(ApplicantDTO applicant)
         {
-            if (person.FamilyData.TotalIncome < 0)
-                throw new Exception(ErrorMessage.InvalidaTotalIncomeError(person.FullName));
+            if (applicant.FamilyData.TotalIncome < 0)
+                throw new Exception(ErrorMessage.InvalidaTotalIncomeError(applicant.FullName));
         }
 
-        private static void ValidateApplicant(PersonDTO person)
+        private static void ValidateApplicant(ApplicantDTO applicant)
         {
-            if (!Applicants.Contains(person.Document))
+            if (!Applicants.Contains(applicant.Document))
             {
-                Applicants.Add(person.Document);
+                Applicants.Add(applicant.Document);
 
-                if (person.Spouse != default)
+                if (applicant.Spouse != default)
                 {
-                    if (!Applicants.Contains(person.Spouse.Document))
-                        Applicants.Add(person.Spouse.Document);
+                    if (!Applicants.Contains(applicant.Spouse.Document))
+                        Applicants.Add(applicant.Spouse.Document);
                     else
-                        ReturnError(person.FullName);
+                        ReturnError(applicant.FullName);
                 }
 
-                if (person.FamilyData.Dependents != default)
+                if (applicant.FamilyData.Dependents != default)
                 {
-                    foreach (var dependent in person.FamilyData.Dependents)
+                    foreach (var dependent in applicant.FamilyData.Dependents)
                     {
                         if (!Applicants.Contains(dependent.Document))
                             Applicants.Add(dependent.Document);
                         else
-                            ReturnError(person.FullName);
+                            ReturnError(applicant.FullName);
                     }
                 }
             }
             else
             {
-                ReturnError(person.FullName);
+                ReturnError(applicant.FullName);
             }
         }
 
-        private static bool HasValidTotalIncome(PersonDTO person)
+        private static bool HasValidTotalIncome(ApplicantDTO applicant)
         {
-            if (person.FamilyData.TotalIncome <= AppSettings.IncomeMaxValue)
+            if (applicant.FamilyData.TotalIncome <= AppSettings.IncomeMaxValue)
                 return true;
             return false;
         }
@@ -85,11 +85,11 @@ namespace Challenge.Business.Services
             throw new Exception(ErrorMessage.FamilyAlreadyHasApplicantError(applicantFullName));
         }
 
-        private static int CalculateScore(PersonDTO person)
+        private static int CalculateScore(ApplicantDTO applicant)
         {
             int score = 0;
-            score += CalculateScoreByTotalIncome(person.FamilyData.TotalIncome);
-            score += CalculateScoreByDependents(person.FamilyData.Dependents);
+            score += CalculateScoreByTotalIncome(applicant.FamilyData.TotalIncome);
+            score += CalculateScoreByDependents(applicant.FamilyData.Dependents);
             return score;
         }
 
@@ -101,11 +101,11 @@ namespace Challenge.Business.Services
                 return AppSettings.IncomeMaxScore;
         }
 
-        private static int CalculateScoreByDependents(List<DependentDTO> dependents)
+        private static int CalculateScoreByDependents(List<DependentDTO> dependentList)
         {
-            if (dependents != default)
+            if (dependentList != default)
             {
-                var validDependentsTotal = GetTotalValidDependentsByBirthDate(dependents);
+                var validDependentsTotal = GetTotalValidDependentsByBirthDate(dependentList);
                 if (validDependentsTotal > 0 && validDependentsTotal <= AppSettings.NumberOfDependentsControl)
                     return AppSettings.OneOrTwoDependentsScore;
                 else if (validDependentsTotal > AppSettings.NumberOfDependentsControl)
@@ -116,14 +116,14 @@ namespace Challenge.Business.Services
             return 0;
         }
 
-        private static int GetTotalValidDependentsByBirthDate(List<DependentDTO> dependents)
+        private static int GetTotalValidDependentsByBirthDate(List<DependentDTO> dependentList)
         {
-            return dependents.Where(dependent => dependent.BirthDate.Date > DateTime.Now.AddYears(-AppSettings.AdultPersonAge).Date).Count();
+            return dependentList.Where(dependent => dependent.BirthDate.Date > DateTime.Now.AddYears(-AppSettings.AdultPersonAge).Date).Count();
         }
 
-        private static List<PersonDTO> GetSortedList(List<PersonDTO> personDTOList)
+        private static List<ApplicantDTO> GetSortedList(List<ApplicantDTO> applicantList)
         {
-            return personDTOList.OrderByDescending(personDTOList => personDTOList.Score).ToList();
+            return applicantList.OrderByDescending(applicant => applicant.Score).ToList();
         }
     }
 }

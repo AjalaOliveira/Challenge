@@ -2,7 +2,7 @@
 
 namespace Challenge.Domain.DTOs
 {
-    public class PersonDTO : CommonDataDTO
+    public class ApplicantDTO : CommonDataDTO
     {
         public int Score { get; set; }
         public SpouseDTO Spouse { get; set; }

@@ -3,10 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Challenge.API.ViewModels
 {
-    public class PersonViewModel : CommonDataViewModel
+    public class ApplicantViewModel : CommonDataViewModel
     {
         public int Score { get; set; }
 
+        [Required(ErrorMessage = ErrorMessage.SpouseError)]
         public SpouseViewModel Spouse { get; set; }
 
         [Required(ErrorMessage = ErrorMessage.FamilyDataError)]

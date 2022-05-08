@@ -13,7 +13,7 @@ namespace Challenge.API.Configuration
             {
                 mce.CreateMap<DependentDTO, DependentViewModel>().ReverseMap();
                 mce.CreateMap<FamilyDataDTO, FamilyDataViewModel>().ReverseMap();
-                mce.CreateMap<PersonDTO, PersonViewModel>().ReverseMap();
+                mce.CreateMap<ApplicantDTO, ApplicantViewModel>().ReverseMap();
                 mce.CreateMap<SpouseDTO, SpouseViewModel>().ReverseMap();
             });
             IMapper mapper = config.CreateMapper();

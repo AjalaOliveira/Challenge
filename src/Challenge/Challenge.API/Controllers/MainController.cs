@@ -33,7 +33,7 @@ namespace Challenge.API.Controllers
                 return Ok(new
                 {
                     success = true,
-                    data = _mapper.Map<List<PersonViewModel>>(result)
+                    data = _mapper.Map<List<ApplicantViewModel>>(result)
                 });
             }
 

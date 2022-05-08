@@ -25,14 +25,14 @@ namespace Challenge.API.V1
 
         [ActionName("SortListOfPeople")]
         [HttpPost]
-        public async Task<IActionResult> SortListOfPeople(List<PersonViewModel> personViewModel)
+        public async Task<IActionResult> SortListOfPeople(List<ApplicantViewModel> applicantViewModel)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return CustomResponse(ModelState);
 
-                var result = await _peopleService.SortListOfPeople(_mapper.Map<List<PersonDTO>>(personViewModel));
+                var result = await _peopleService.SortListOfPeople(_mapper.Map<List<ApplicantDTO>>(applicantViewModel));
                 return CustomResponse(result);
             }
             catch (Exception ex)

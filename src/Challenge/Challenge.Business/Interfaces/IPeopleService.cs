@@ -6,6 +6,6 @@ namespace Challenge.Business.Interfaces
 {
     public interface IPeopleService
     {
-        Task<List<PersonDTO>> SortListOfPeople(List<PersonDTO> personDTO);
+        Task<List<ApplicantDTO>> SortListOfPeople(List<ApplicantDTO> applicantDTO);
     }
 }

@@ -28,352 +28,10 @@ namespace Challenge.API.Tests
         #region HAPPY TESTS FOR LISTS WITH ONE APPLICANT ONLY
 
         [Fact]
-        public async Task SortListOfPeople_ShouldReturnScore_5_ForSinglePersonWithLessThanMinIncomeAndWithoutDependent()
+        public async Task SortListOfPeople_ShouldReturnScore_5_ForApplicantWithLessThanMinIncomeAndWithoutDependent()
         {
             //Arrange
-            PersonViewModel personViewModel = new()
-            {
-                FullName = "Applicant Full Name",
-                Document = "123",
-                FamilyData = new()
-                {
-                    TotalIncome = AppSettings.IncomeMinValue
-                }
-            };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
-
-            //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
-            var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
-
-            //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var PersonViewModel in PersonViewModelList)
-            {
-                PersonViewModel.Score.Should().Be(AppSettings.IncomeMinScore);
-            }
-        }
-
-        [Fact]
-        public async Task SortListOfPeople_ShouldReturnScore_7_ForSinglePersonWithLessThanMinIncomeAndWithOneDependent()
-        {
-            //Arrange
-            List<DependentViewModel> dependents = new();
-            dependents.Add(new DependentViewModel
-            {
-                FullName = "Dependent Full Name",
-                Document = "456",
-                BirthDate = DateTime.Now
-            });
-
-            PersonViewModel personViewModel = new()
-            {
-                FullName = "Applicant Full Name",
-                Document = "123",
-                FamilyData = new()
-                {
-                    TotalIncome = AppSettings.IncomeMinValue,
-                    Dependents = dependents
-                }
-            };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
-
-            //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
-            var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
-
-            //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var PersonViewModel in PersonViewModelList)
-            {
-                PersonViewModel.Score.Should().Be(AppSettings.IncomeMinScore + AppSettings.OneOrTwoDependentsScore);
-            }
-        }
-
-        [Fact]
-        public async Task SortListOfPeople_ShouldReturnScore_7_ForSinglePersonWithLessThanMinIncomeAndWithTwoDependents()
-        {
-            //Arrange
-            DependentViewModel dependent1 = new()
-            {
-                FullName = "Dependent Full Name1",
-                Document = "4561",
-                BirthDate = DateTime.Now
-            };
-
-            DependentViewModel dependent2 = new()
-            {
-                FullName = "Dependent Full Name1",
-                Document = "4562",
-                BirthDate = DateTime.Now
-            };
-
-            List<DependentViewModel> dependents = new();
-            dependents.Add(dependent1);
-            dependents.Add(dependent2);
-
-            PersonViewModel personViewModel = new()
-            {
-                FullName = "Applicant Full Name",
-                Document = "123",
-                FamilyData = new()
-                {
-                    TotalIncome = AppSettings.IncomeMinValue,
-                    Dependents = dependents
-                }
-            };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
-
-            //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
-            var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
-
-            //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var PersonViewModel in PersonViewModelList)
-            {
-                PersonViewModel.Score.Should().Be(AppSettings.IncomeMinScore + AppSettings.OneOrTwoDependentsScore);
-            }
-        }
-
-        [Fact]
-        public async Task SortListOfPeople_ShouldReturnScore_8_ForSinglePersonWithLessThanMinIncomeAndWithThreeDependents()
-        {
-            //Arrange
-            DependentViewModel dependent1 = new()
-            {
-                FullName = "Dependent Full Name1",
-                Document = "4561",
-                BirthDate = DateTime.Now
-            };
-
-            DependentViewModel dependent2 = new()
-            {
-                FullName = "Dependent Full Name1",
-                Document = "4562",
-                BirthDate = DateTime.Now
-            };
-
-            DependentViewModel dependent3 = new()
-            {
-                FullName = "Dependent Full Name3",
-                Document = "4563",
-                BirthDate = DateTime.Now
-            };
-
-            List<DependentViewModel> dependents = new();
-            dependents.Add(dependent1);
-            dependents.Add(dependent2);
-            dependents.Add(dependent3);
-
-            PersonViewModel personViewModel = new()
-            {
-                FullName = "Applicant Full Name",
-                Document = "123",
-                FamilyData = new()
-                {
-                    TotalIncome = AppSettings.IncomeMinValue,
-                    Dependents = dependents
-                }
-            };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
-
-            //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
-            var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
-
-            //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var PersonViewModel in PersonViewModelList)
-            {
-                PersonViewModel.Score.Should().Be(AppSettings.IncomeMinScore + AppSettings.ThreeOrMoreDependentsScore);
-            }
-        }
-
-        [Fact]
-        public async Task SortListOfPeople_ShouldReturnScore_3_ForSinglePersonWithMoreThanMinIncomeAndWithoutDependent()
-        {
-            //Arrange
-            PersonViewModel personViewModel = new()
-            {
-                FullName = "Applicant Full Name",
-                Document = "123",
-                FamilyData = new()
-                {
-                    TotalIncome = AppSettings.IncomeMinValue + 1
-                }
-            };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
-
-            //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
-            var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
-
-            //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var PersonViewModel in PersonViewModelList)
-            {
-                PersonViewModel.Score.Should().Be(AppSettings.IncomeMaxScore);
-            }
-        }
-
-        [Fact]
-        public async Task SortListOfPeople_ShouldReturnScore_5_ForSinglePersonWithMoreThanMinIncomeAndWithOneDependent()
-        {
-            //Arrange
-            List<DependentViewModel> dependents = new();
-            dependents.Add(new DependentViewModel
-            {
-                FullName = "Dependent Full Name",
-                Document = "456",
-                BirthDate = DateTime.Now
-            });
-
-            PersonViewModel personViewModel = new()
-            {
-                FullName = "Applicant Full Name",
-                Document = "123",
-                FamilyData = new()
-                {
-                    TotalIncome = AppSettings.IncomeMinValue + 1,
-                    Dependents = dependents
-                }
-            };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
-
-            //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
-            var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
-
-            //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var PersonViewModel in PersonViewModelList)
-            {
-                PersonViewModel.Score.Should().Be(AppSettings.IncomeMaxScore + AppSettings.OneOrTwoDependentsScore);
-            }
-        }
-
-        [Fact]
-        public async Task SortListOfPeople_ShouldReturnScore_5_ForSinglePersonWithMoreThanMinIncomeAndWithTwoDependents()
-        {
-            //Arrange
-            DependentViewModel dependent1 = new()
-            {
-                FullName = "Dependent Full Name1",
-                Document = "4561",
-                BirthDate = DateTime.Now
-            };
-
-            DependentViewModel dependent2 = new()
-            {
-                FullName = "Dependent Full Name1",
-                Document = "4562",
-                BirthDate = DateTime.Now
-            };
-
-            List<DependentViewModel> dependents = new();
-            dependents.Add(dependent1);
-            dependents.Add(dependent2);
-
-            PersonViewModel personViewModel = new()
-            {
-                FullName = "Applicant Full Name",
-                Document = "123",
-                FamilyData = new()
-                {
-                    TotalIncome = AppSettings.IncomeMinValue + 1,
-                    Dependents = dependents
-                }
-            };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
-
-            //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
-            var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
-
-            //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var PersonViewModel in PersonViewModelList)
-            {
-                PersonViewModel.Score.Should().Be(AppSettings.IncomeMaxScore + AppSettings.OneOrTwoDependentsScore);
-            }
-        }
-
-        [Fact]
-        public async Task SortListOfPeople_ShouldReturnScore_6_ForSinglePersonWithMoreThanMinIncomeAndWithThreeDependents()
-        {
-            //Arrange
-            DependentViewModel dependent1 = new()
-            {
-                FullName = "Dependent Full Name1",
-                Document = "4561",
-                BirthDate = DateTime.Now
-            };
-
-            DependentViewModel dependent2 = new()
-            {
-                FullName = "Dependent Full Name1",
-                Document = "4562",
-                BirthDate = DateTime.Now
-            };
-
-            DependentViewModel dependent3 = new()
-            {
-                FullName = "Dependent Full Name3",
-                Document = "4563",
-                BirthDate = DateTime.Now
-            };
-
-            List<DependentViewModel> dependents = new();
-            dependents.Add(dependent1);
-            dependents.Add(dependent2);
-            dependents.Add(dependent3);
-
-            PersonViewModel personViewModel = new()
-            {
-                FullName = "Applicant Full Name",
-                Document = "123",
-                FamilyData = new()
-                {
-                    TotalIncome = AppSettings.IncomeMinValue + 1,
-                    Dependents = dependents
-                }
-            };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
-
-            //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
-            var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
-
-            //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var PersonViewModel in PersonViewModelList)
-            {
-                PersonViewModel.Score.Should().Be(AppSettings.IncomeMaxScore + AppSettings.ThreeOrMoreDependentsScore);
-            }
-        }
-
-        [Fact]
-        public async Task SortListOfPeople_ShouldReturnScore_5_ForMarriedPersonWithLessThanMinIncomeAndWithoutDependent()
-        {
-            //Arrange
-            PersonViewModel personViewModel = new()
+            ApplicantViewModel applicantViewModel = new()
             {
                 FullName = "Applicant Full Name",
                 Document = "123",
@@ -387,24 +45,24 @@ namespace Challenge.API.Tests
                     TotalIncome = AppSettings.IncomeMinValue
                 }
             };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
+            List<ApplicantViewModel> applicantViewModelList = new();
+            applicantViewModelList.Add(applicantViewModel);
 
             //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
+            var response = await _client.PostAsJsonAsync(uri, applicantViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
+            var applicantList = JsonConvert.DeserializeObject<List<ApplicantViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var PersonViewModel in PersonViewModelList)
+            foreach (var applicant in applicantList)
             {
-                PersonViewModel.Score.Should().Be(AppSettings.IncomeMinScore);
+                applicant.Score.Should().Be(AppSettings.IncomeMinScore);
             }
         }
 
         [Fact]
-        public async Task SortListOfPeople_ShouldReturnScore_7_ForMarriedPersonWithLessThanMinIncomeAndWithOneDependent()
+        public async Task SortListOfPeople_ShouldReturnScore_7_ForApplicantWithLessThanMinIncomeAndWithOneDependent()
         {
             //Arrange
             List<DependentViewModel> dependents = new();
@@ -415,7 +73,7 @@ namespace Challenge.API.Tests
                 BirthDate = DateTime.Now
             });
 
-            PersonViewModel personViewModel = new()
+            ApplicantViewModel applicantViewModel = new()
             {
                 FullName = "Applicant Full Name",
                 Document = "123",
@@ -430,24 +88,24 @@ namespace Challenge.API.Tests
                     Dependents = dependents
                 }
             };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
+            List<ApplicantViewModel> applicantViewModelList = new();
+            applicantViewModelList.Add(applicantViewModel);
 
             //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
+            var response = await _client.PostAsJsonAsync(uri, applicantViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
+            var applicantList = JsonConvert.DeserializeObject<List<ApplicantViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var PersonViewModel in PersonViewModelList)
+            foreach (var applicant in applicantList)
             {
-                PersonViewModel.Score.Should().Be(AppSettings.IncomeMinScore + AppSettings.OneOrTwoDependentsScore);
+                applicant.Score.Should().Be(AppSettings.IncomeMinScore + AppSettings.OneOrTwoDependentsScore);
             }
         }
 
         [Fact]
-        public async Task SortListOfPeople_ShouldReturnScore_7_ForMarriedPersonWithLessThanMinIncomeAndWithTwoDependents()
+        public async Task SortListOfPeople_ShouldReturnScore_7_ForApplicantWithLessThanMinIncomeAndWithTwoDependents()
         {
             //Arrange
             DependentViewModel dependent1 = new()
@@ -468,7 +126,7 @@ namespace Challenge.API.Tests
             dependents.Add(dependent1);
             dependents.Add(dependent2);
 
-            PersonViewModel personViewModel = new()
+            ApplicantViewModel applicantViewModel = new()
             {
                 FullName = "Applicant Full Name",
                 Document = "123",
@@ -483,24 +141,24 @@ namespace Challenge.API.Tests
                     Dependents = dependents
                 }
             };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
+            List<ApplicantViewModel> applicantViewModelList = new();
+            applicantViewModelList.Add(applicantViewModel);
 
             //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
+            var response = await _client.PostAsJsonAsync(uri, applicantViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
+            var applicantList = JsonConvert.DeserializeObject<List<ApplicantViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var PersonViewModel in PersonViewModelList)
+            foreach (var applicant in applicantList)
             {
-                PersonViewModel.Score.Should().Be(AppSettings.IncomeMinScore + AppSettings.OneOrTwoDependentsScore);
+                applicant.Score.Should().Be(AppSettings.IncomeMinScore + AppSettings.OneOrTwoDependentsScore);
             }
         }
 
         [Fact]
-        public async Task SortListOfPeople_ShouldReturnScore_8_ForMarriedPersonWithLessThanMinIncomeAndWithThreeDependents()
+        public async Task SortListOfPeople_ShouldReturnScore_8_ForApplicantWithLessThanMinIncomeAndWithThreeDependents()
         {
             //Arrange
             DependentViewModel dependent1 = new()
@@ -529,7 +187,7 @@ namespace Challenge.API.Tests
             dependents.Add(dependent2);
             dependents.Add(dependent3);
 
-            PersonViewModel personViewModel = new()
+            ApplicantViewModel applicantViewModel = new()
             {
                 FullName = "Applicant Full Name",
                 Document = "123",
@@ -544,27 +202,27 @@ namespace Challenge.API.Tests
                     Dependents = dependents
                 }
             };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
+            List<ApplicantViewModel> applicantViewModelList = new();
+            applicantViewModelList.Add(applicantViewModel);
 
             //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
+            var response = await _client.PostAsJsonAsync(uri, applicantViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
+            var applicantList = JsonConvert.DeserializeObject<List<ApplicantViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var PersonViewModel in PersonViewModelList)
+            foreach (var applicant in applicantList)
             {
-                PersonViewModel.Score.Should().Be(AppSettings.IncomeMinScore + AppSettings.ThreeOrMoreDependentsScore);
+                applicant.Score.Should().Be(AppSettings.IncomeMinScore + AppSettings.ThreeOrMoreDependentsScore);
             }
         }
 
         [Fact]
-        public async Task SortListOfPeople_ShouldReturnScore_3_ForMarriedPersonWithMoreThanMinIncomeAndWithoutDependent()
+        public async Task SortListOfPeople_ShouldReturnScore_3_ForApplicantWithMoreThanMinIncomeAndWithoutDependent()
         {
             //Arrange
-            PersonViewModel personViewModel = new()
+            ApplicantViewModel applicantViewModel = new()
             {
                 FullName = "Applicant Full Name",
                 Document = "123",
@@ -578,24 +236,24 @@ namespace Challenge.API.Tests
                     TotalIncome = AppSettings.IncomeMinValue + 1
                 }
             };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
+            List<ApplicantViewModel> applicantViewModelList = new();
+            applicantViewModelList.Add(applicantViewModel);
 
             //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
+            var response = await _client.PostAsJsonAsync(uri, applicantViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
+            var applicantList = JsonConvert.DeserializeObject<List<ApplicantViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var PersonViewModel in PersonViewModelList)
+            foreach (var applicant in applicantList)
             {
-                PersonViewModel.Score.Should().Be(AppSettings.IncomeMaxScore);
+                applicant.Score.Should().Be(AppSettings.IncomeMaxScore);
             }
         }
 
         [Fact]
-        public async Task SortListOfPeople_ShouldReturnScore_5_ForMarriedPersonWithMoreThanMinIncomeAndWithOneDependent()
+        public async Task SortListOfPeople_ShouldReturnScore_5_ForApplicantWithMoreThanMinIncomeAndWithOneDependent()
         {
             //Arrange
             List<DependentViewModel> dependents = new();
@@ -606,7 +264,7 @@ namespace Challenge.API.Tests
                 BirthDate = DateTime.Now
             });
 
-            PersonViewModel personViewModel = new()
+            ApplicantViewModel applicantViewModel = new()
             {
                 FullName = "Applicant Full Name",
                 Document = "123",
@@ -621,24 +279,24 @@ namespace Challenge.API.Tests
                     Dependents = dependents
                 }
             };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
+            List<ApplicantViewModel> applicantViewModelList = new();
+            applicantViewModelList.Add(applicantViewModel);
 
             //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
+            var response = await _client.PostAsJsonAsync(uri, applicantViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
+            var applicantList = JsonConvert.DeserializeObject<List<ApplicantViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var PersonViewModel in PersonViewModelList)
+            foreach (var applicant in applicantList)
             {
-                PersonViewModel.Score.Should().Be(AppSettings.IncomeMaxScore + AppSettings.OneOrTwoDependentsScore);
+                applicant.Score.Should().Be(AppSettings.IncomeMaxScore + AppSettings.OneOrTwoDependentsScore);
             }
         }
 
         [Fact]
-        public async Task SortListOfPeople_ShouldReturnScore_5_ForMarriedPersonWithMoreThanMinIncomeAndWithTwoDependents()
+        public async Task SortListOfPeople_ShouldReturnScore_5_ForApplicantWithMoreThanMinIncomeAndWithTwoDependents()
         {
             //Arrange
             DependentViewModel dependent1 = new()
@@ -659,7 +317,7 @@ namespace Challenge.API.Tests
             dependents.Add(dependent1);
             dependents.Add(dependent2);
 
-            PersonViewModel personViewModel = new()
+            ApplicantViewModel applicantViewModel = new()
             {
                 FullName = "Applicant Full Name",
                 Document = "123",
@@ -674,85 +332,24 @@ namespace Challenge.API.Tests
                     Dependents = dependents
                 }
             };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
+            List<ApplicantViewModel> applicantViewModelList = new();
+            applicantViewModelList.Add(applicantViewModel);
 
             //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
+            var response = await _client.PostAsJsonAsync(uri, applicantViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
+            var applicantList = JsonConvert.DeserializeObject<List<ApplicantViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var PersonViewModel in PersonViewModelList)
+            foreach (var applicant in applicantList)
             {
-                PersonViewModel.Score.Should().Be(AppSettings.IncomeMaxScore + AppSettings.OneOrTwoDependentsScore);
+                applicant.Score.Should().Be(AppSettings.IncomeMaxScore + AppSettings.OneOrTwoDependentsScore);
             }
         }
 
         [Fact]
-        public async Task SortListOfPeople_ShouldReturnScore_6_ForMarriedPersonWithMoreThanMinIncomeAndWithThreeDependents()
-        {
-            //Arrange
-            DependentViewModel dependent1 = new()
-            {
-                FullName = "Dependent Full Name1",
-                Document = "4561",
-                BirthDate = DateTime.Now
-            };
-
-            DependentViewModel dependent2 = new()
-            {
-                FullName = "Dependent Full Name1",
-                Document = "4562",
-                BirthDate = DateTime.Now
-            };
-
-            DependentViewModel dependent3 = new()
-            {
-                FullName = "Dependent Full Name3",
-                Document = "4563",
-                BirthDate = DateTime.Now
-            };
-
-            List<DependentViewModel> dependents = new();
-            dependents.Add(dependent1);
-            dependents.Add(dependent2);
-            dependents.Add(dependent3);
-
-            PersonViewModel personViewModel = new()
-            {
-                FullName = "Applicant Full Name",
-                Document = "123",
-                Spouse = new()
-                {
-                    FullName = "Spouse Full Name",
-                    Document = "1231"
-                },
-                FamilyData = new()
-                {
-                    TotalIncome = AppSettings.IncomeMinValue + 1,
-                    Dependents = dependents
-                }
-            };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
-
-            //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
-            var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
-
-            //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var PersonViewModel in PersonViewModelList)
-            {
-                PersonViewModel.Score.Should().Be(AppSettings.IncomeMaxScore + AppSettings.ThreeOrMoreDependentsScore);
-            }
-        }
-
-        [Fact]
-        public async Task SortListOfPeople_ShouldReturnScore_0_ForMarriedPersonWithMoreThanMaxIncomeAndWithThreeDependents()
+        public async Task SortListOfPeople_ShouldReturnScore_6_ForApplicantWithMoreThanMinIncomeAndWithThreeDependents()
         {
             //Arrange
             DependentViewModel dependent1 = new()
@@ -781,7 +378,68 @@ namespace Challenge.API.Tests
             dependents.Add(dependent2);
             dependents.Add(dependent3);
 
-            PersonViewModel personViewModel = new()
+            ApplicantViewModel applicantViewModel = new()
+            {
+                FullName = "Applicant Full Name",
+                Document = "123",
+                Spouse = new()
+                {
+                    FullName = "Spouse Full Name",
+                    Document = "1231"
+                },
+                FamilyData = new()
+                {
+                    TotalIncome = AppSettings.IncomeMinValue + 1,
+                    Dependents = dependents
+                }
+            };
+            List<ApplicantViewModel> applicantViewModelList = new();
+            applicantViewModelList.Add(applicantViewModel);
+
+            //Act
+            var response = await _client.PostAsJsonAsync(uri, applicantViewModelList);
+            var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
+            var applicantList = JsonConvert.DeserializeObject<List<ApplicantViewModel>>(responseData.ToString());
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            foreach (var applicant in applicantList)
+            {
+                applicant.Score.Should().Be(AppSettings.IncomeMaxScore + AppSettings.ThreeOrMoreDependentsScore);
+            }
+        }
+
+        [Fact]
+        public async Task SortListOfPeople_ShouldReturnScore_0_ForApplicantWithMoreThanMaxIncomeAndWithThreeDependents()
+        {
+            //Arrange
+            DependentViewModel dependent1 = new()
+            {
+                FullName = "Dependent Full Name1",
+                Document = "4561",
+                BirthDate = DateTime.Now
+            };
+
+            DependentViewModel dependent2 = new()
+            {
+                FullName = "Dependent Full Name1",
+                Document = "4562",
+                BirthDate = DateTime.Now
+            };
+
+            DependentViewModel dependent3 = new()
+            {
+                FullName = "Dependent Full Name3",
+                Document = "4563",
+                BirthDate = DateTime.Now
+            };
+
+            List<DependentViewModel> dependents = new();
+            dependents.Add(dependent1);
+            dependents.Add(dependent2);
+            dependents.Add(dependent3);
+
+            ApplicantViewModel applicantViewModel = new()
             {
                 FullName = "Applicant Full Name",
                 Document = "123",
@@ -796,19 +454,19 @@ namespace Challenge.API.Tests
                     Dependents = dependents
                 }
             };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
+            List<ApplicantViewModel> applicantViewModelList = new();
+            applicantViewModelList.Add(applicantViewModel);
 
             //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
+            var response = await _client.PostAsJsonAsync(uri, applicantViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
+            var applicantList = JsonConvert.DeserializeObject<List<ApplicantViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var PersonViewModel in PersonViewModelList)
+            foreach (var applicant in applicantList)
             {
-                PersonViewModel.Score.Should().Be(0);
+                applicant.Score.Should().Be(0);
             }
         }
 
@@ -830,7 +488,7 @@ namespace Challenge.API.Tests
             List<DependentViewModel> dependents = new();
             dependents.Add(dependent1);
 
-            PersonViewModel personViewModel = new()
+            ApplicantViewModel applicantViewModel = new()
             {
                 FullName = string.Empty,
                 Document = "123",
@@ -845,11 +503,11 @@ namespace Challenge.API.Tests
                     Dependents = dependents
                 }
             };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
+            List<ApplicantViewModel> applicantViewModelList = new();
+            applicantViewModelList.Add(applicantViewModel);
 
             //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
+            var response = await _client.PostAsJsonAsync(uri, applicantViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("errors");
 
             //Assert
@@ -871,7 +529,7 @@ namespace Challenge.API.Tests
             List<DependentViewModel> dependents = new();
             dependents.Add(dependent1);
 
-            PersonViewModel personViewModel = new()
+            ApplicantViewModel applicantViewModel = new()
             {
                 FullName = "Applicant Full Name",
                 Document = string.Empty,
@@ -886,11 +544,11 @@ namespace Challenge.API.Tests
                     Dependents = dependents
                 }
             };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
+            List<ApplicantViewModel> applicantViewModelList = new();
+            applicantViewModelList.Add(applicantViewModel);
 
             //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
+            var response = await _client.PostAsJsonAsync(uri, applicantViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("errors");
 
             //Assert
@@ -912,7 +570,7 @@ namespace Challenge.API.Tests
             List<DependentViewModel> dependents = new();
             dependents.Add(dependent1);
 
-            PersonViewModel personViewModel = new()
+            ApplicantViewModel applicantViewModel = new()
             {
                 FullName = "Applicant Full Name",
                 Document = "123",
@@ -927,11 +585,11 @@ namespace Challenge.API.Tests
                     Dependents = dependents
                 }
             };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
+            List<ApplicantViewModel> applicantViewModelList = new();
+            applicantViewModelList.Add(applicantViewModel);
 
             //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
+            var response = await _client.PostAsJsonAsync(uri, applicantViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("errors");
 
             //Assert
@@ -953,7 +611,7 @@ namespace Challenge.API.Tests
             List<DependentViewModel> dependents = new();
             dependents.Add(dependent1);
 
-            PersonViewModel personViewModel = new()
+            ApplicantViewModel applicantViewModel = new()
             {
                 FullName = "Applicant Full Name",
                 Document = "123",
@@ -968,11 +626,11 @@ namespace Challenge.API.Tests
                     Dependents = dependents
                 }
             };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
+            List<ApplicantViewModel> applicantViewModelList = new();
+            applicantViewModelList.Add(applicantViewModel);
 
             //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
+            var response = await _client.PostAsJsonAsync(uri, applicantViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("errors");
 
             //Assert
@@ -994,7 +652,7 @@ namespace Challenge.API.Tests
             List<DependentViewModel> dependents = new();
             dependents.Add(dependent1);
 
-            PersonViewModel personViewModel = new()
+            ApplicantViewModel applicantViewModel = new()
             {
                 FullName = "Applicant Full Name1",
                 Document = "123",
@@ -1009,11 +667,11 @@ namespace Challenge.API.Tests
                     Dependents = dependents
                 }
             };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
+            List<ApplicantViewModel> applicantViewModelList = new();
+            applicantViewModelList.Add(applicantViewModel);
 
             //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
+            var response = await _client.PostAsJsonAsync(uri, applicantViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("errors");
 
             //Assert
@@ -1035,7 +693,7 @@ namespace Challenge.API.Tests
             List<DependentViewModel> dependents = new();
             dependents.Add(dependent1);
 
-            PersonViewModel personViewModel = new()
+            ApplicantViewModel applicantViewModel = new()
             {
                 FullName = "Dependent Full Name",
                 Document = "123",
@@ -1050,11 +708,11 @@ namespace Challenge.API.Tests
                     Dependents = dependents
                 }
             };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
+            List<ApplicantViewModel> applicantViewModelList = new();
+            applicantViewModelList.Add(applicantViewModel);
 
             //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
+            var response = await _client.PostAsJsonAsync(uri, applicantViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("errors");
 
             //Assert
@@ -1076,7 +734,7 @@ namespace Challenge.API.Tests
             List<DependentViewModel> dependents = new();
             dependents.Add(dependent1);
 
-            PersonViewModel personViewModel = new()
+            ApplicantViewModel applicantViewModel = new()
             {
                 FullName = "Dependent Full Name",
                 Document = "123",
@@ -1091,11 +749,11 @@ namespace Challenge.API.Tests
                     Dependents = dependents
                 }
             };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
+            List<ApplicantViewModel> applicantViewModelList = new();
+            applicantViewModelList.Add(applicantViewModel);
 
             //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
+            var response = await _client.PostAsJsonAsync(uri, applicantViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("errors");
 
             //Assert
@@ -1107,7 +765,7 @@ namespace Challenge.API.Tests
         public async Task SortListOfPeople_ShouldReturnErroWhenTheTotalIncomeIsNotInformed()
         {
             //Arrange
-            PersonViewModel personViewModel = new()
+            ApplicantViewModel applicantViewModel = new()
             {
                 FullName = "Applicant Full Name",
                 Document = "123",
@@ -1116,11 +774,11 @@ namespace Challenge.API.Tests
                     TotalIncome = null
                 }
             };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
+            List<ApplicantViewModel> applicantViewModelList = new();
+            applicantViewModelList.Add(applicantViewModel);
 
             //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
+            var response = await _client.PostAsJsonAsync(uri, applicantViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("errors");
 
             //Assert
@@ -1133,20 +791,25 @@ namespace Challenge.API.Tests
         {
             //Arrange
             var applicationFullName = "Applicant Full Name";
-            PersonViewModel personViewModel = new()
+            ApplicantViewModel applicantViewModel = new()
             {
                 FullName = applicationFullName,
                 Document = "123",
+                Spouse = new()
+                {
+                    FullName = "Spouse Full Name",
+                    Document = "1231"
+                },
                 FamilyData = new()
                 {
                     TotalIncome = -1
                 }
             };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
+            List<ApplicantViewModel> applicantViewModelList = new();
+            applicantViewModelList.Add(applicantViewModel);
 
             //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
+            var response = await _client.PostAsJsonAsync(uri, applicantViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
 
             //Assert
@@ -1170,29 +833,34 @@ namespace Challenge.API.Tests
                 BirthDate = DateTime.Now.AddYears(-AppSettings.AdultPersonAge)
             });
 
-            PersonViewModel personViewModel = new()
+            ApplicantViewModel applicantViewModel = new()
             {
                 FullName = "Applicant Full Name",
                 Document = "123",
+                Spouse = new()
+                {
+                    FullName = "Spouse Full Name",
+                    Document = "1231"
+                },
                 FamilyData = new()
                 {
                     TotalIncome = AppSettings.IncomeMinValue,
                     Dependents = dependents
                 }
             };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel);
+            List<ApplicantViewModel> applicantViewModelList = new();
+            applicantViewModelList.Add(applicantViewModel);
 
             //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
+            var response = await _client.PostAsJsonAsync(uri, applicantViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
+            var applicantList = JsonConvert.DeserializeObject<List<ApplicantViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var PersonViewModel in PersonViewModelList)
+            foreach (var applicant in applicantList)
             {
-                PersonViewModel.Score.Should().Be(AppSettings.IncomeMinScore);
+                applicant.Score.Should().Be(AppSettings.IncomeMinScore);
             }
         }
 
@@ -1201,7 +869,7 @@ namespace Challenge.API.Tests
         {
             //Arrange
             var applicationFullName = "Tatiane Oliveira";
-            PersonViewModel personViewModel1 = new()
+            ApplicantViewModel applicantViewModel1 = new()
             {
                 FullName = "Ajala Oliveira",
                 Document = "123",
@@ -1215,7 +883,7 @@ namespace Challenge.API.Tests
                     TotalIncome = AppSettings.IncomeMaxValue + 1
                 }
             };
-            PersonViewModel personViewModel2 = new()
+            ApplicantViewModel applicantViewModel2 = new()
             {
                 FullName = applicationFullName,
                 Document = "1231",
@@ -1229,12 +897,12 @@ namespace Challenge.API.Tests
                     TotalIncome = AppSettings.IncomeMaxValue + 1
                 }
             };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel1);
-            personViewModelList.Add(personViewModel2);
+            List<ApplicantViewModel> applicantViewModelList = new();
+            applicantViewModelList.Add(applicantViewModel1);
+            applicantViewModelList.Add(applicantViewModel2);
 
             //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
+            var response = await _client.PostAsJsonAsync(uri, applicantViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
 
             //Assert
@@ -1247,10 +915,15 @@ namespace Challenge.API.Tests
         {
             //Arrange
             var applicationFullName = "Applicant Full Name";
-            PersonViewModel personViewModel1 = new()
+            ApplicantViewModel applicantViewModel1 = new()
             {
                 FullName = "Dependent Full Name1",
                 Document = "4561",
+                Spouse = new()
+                {
+                    FullName = "Spouse Full Name",
+                    Document = "1231"
+                },
                 FamilyData = new()
                 {
                     TotalIncome = AppSettings.IncomeMaxValue + 1
@@ -1267,14 +940,14 @@ namespace Challenge.API.Tests
             List<DependentViewModel> dependents = new();
             dependents.Add(dependent1);
 
-            PersonViewModel personViewModel2 = new()
+            ApplicantViewModel applicantViewModel2 = new()
             {
                 FullName = applicationFullName,
                 Document = "123",
                 Spouse = new()
                 {
                     FullName = "Spouse Full Name",
-                    Document = "1231"
+                    Document = "1232"
                 },
                 FamilyData = new()
                 {
@@ -1282,12 +955,12 @@ namespace Challenge.API.Tests
                     Dependents = dependents
                 }
             };
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel1);
-            personViewModelList.Add(personViewModel2);
+            List<ApplicantViewModel> applicantViewModelList = new();
+            applicantViewModelList.Add(applicantViewModel1);
+            applicantViewModelList.Add(applicantViewModel2);
 
             //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
+            var response = await _client.PostAsJsonAsync(uri, applicantViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
 
             //Assert
@@ -1296,13 +969,18 @@ namespace Challenge.API.Tests
         }
 
         [Fact]
-        public async Task SortListOfPeople_ShouldReturnStoredList()
+        public async Task SortListOfPeople_ShouldReturnSortedList()
         {
             //Arrange
-            PersonViewModel personViewModel1 = new()
+            ApplicantViewModel applicantViewModel1 = new()
             {
                 FullName = "Applicant Full Name",
                 Document = "123A",
+                Spouse = new()
+                {
+                    FullName = "Spouse Full Name",
+                    Document = "1231A"
+                },
                 FamilyData = new()
                 {
                     TotalIncome = AppSettings.IncomeMinValue + 1
@@ -1316,10 +994,15 @@ namespace Challenge.API.Tests
                 Document = "456B",
                 BirthDate = DateTime.Now
             });
-            PersonViewModel personViewModel2 = new()
+            ApplicantViewModel applicantViewModel2 = new()
             {
                 FullName = "Applicant Full Name",
                 Document = "123C",
+                Spouse = new()
+                {
+                    FullName = "Spouse Full Name",
+                    Document = "1231B"
+                },
                 FamilyData = new()
                 {
                     TotalIncome = AppSettings.IncomeMinValue,
@@ -1327,37 +1010,41 @@ namespace Challenge.API.Tests
                 }
             };
 
-            PersonViewModel personViewModel3 = new()
+            ApplicantViewModel applicantViewModel3 = new()
             {
                 FullName = "Applicant Full Name",
                 Document = "123E",
+                Spouse = new()
+                {
+                    FullName = "Spouse Full Name",
+                    Document = "1231C"
+                },
                 FamilyData = new()
                 {
                     TotalIncome = AppSettings.IncomeMinValue
                 }
             };
 
-            List<PersonViewModel> personViewModelList = new();
-            personViewModelList.Add(personViewModel1);
-            personViewModelList.Add(personViewModel2);
-            personViewModelList.Add(personViewModel3);
+            List<ApplicantViewModel> applicantViewModelList = new();
+            applicantViewModelList.Add(applicantViewModel1);
+            applicantViewModelList.Add(applicantViewModel2);
+            applicantViewModelList.Add(applicantViewModel3);
 
             //Act
-            var response = await _client.PostAsJsonAsync(uri, personViewModelList);
+            var response = await _client.PostAsJsonAsync(uri, applicantViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
+            var applicantList = JsonConvert.DeserializeObject<List<ApplicantViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var control = 7;
 
-            foreach (var PersonViewModel in PersonViewModelList)
+            foreach (var applicant in applicantList)
             {
-                PersonViewModel.Score.Should().Be(control);
+                applicant.Score.Should().Be(control);
                 control -= 2;
             }
         }
-
 
         #endregion
 
