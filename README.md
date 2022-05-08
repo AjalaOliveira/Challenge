@@ -1,6 +1,6 @@
-# Challenge.API
+# Challenge.API v1.0
 
-API desenvolvida em .NET 5.0 com testes automatizados.
+API versionada desenvolvida em .NET 5.0 com testes automatizados.
 
 ### Introdução
 API desenvolvida para receber uma lista de pessoas que pretendem ganhar uma casa popular. Como resultado deverá devolver a lista recebida ordenada conforme os critérios abaixo:
@@ -15,3 +15,57 @@ Uma família sempre possuirá um único pretendente e um único cônjuge.
 
 ### Resultado
 O resultado esperado é que as famílias, na listagem, estejam pontuadas de acordo com os critérios que foram atendidos (cada família pode pontuar uma única vez por critério, além de poder atender todos os critérios ou nenhum deles) e ordenadas pela pontuação, favorecendo as famílias melhores pontuadas.
+
+
+### Exemplo de Request JSON
+```json
+[
+  {
+    "fullName": "Nome completo do pretendente",
+    "document": "123",
+    "score": 0,
+    "spouse": {
+      "fullName": "Nome completo do cônjuge",
+      "document": "465"
+    },
+    "familyData": {
+      "totalIncome": 0,
+      "dependents": [
+        {
+          "fullName": "Nome completo do dependente",
+          "document": "789",
+          "birthDate": "2022-05-08"
+        }
+      ]
+    }
+  }
+]
+```
+
+### Exemplo de Respose JSON para o exemplo de Request JSON informado
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "score": 7,
+      "spouse": {
+        "fullName": "Nome completo do cônjuge",
+        "document": "465"
+      },
+      "familyData": {
+        "totalIncome": 0,
+        "dependents": [
+          {
+            "birthDate": "2022-05-08T00:00:00",
+            "fullName": "Nome completo do dependente",
+            "document": "789"
+          }
+        ]
+      },
+      "fullName": "Nome completo do pretendente",
+      "document": "123"
+    }
+  ]
+}
+```
