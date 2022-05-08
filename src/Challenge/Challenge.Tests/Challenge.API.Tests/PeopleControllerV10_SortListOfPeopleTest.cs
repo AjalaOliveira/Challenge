@@ -1,6 +1,5 @@
 using Challenge.API.ViewModels;
 using Challenge.Domain.Config;
-using Challenge.Domain.DTOs;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
@@ -47,13 +46,13 @@ namespace Challenge.API.Tests
             //Act
             var response = await _client.PostAsJsonAsync(uri, personViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var personDTOList = JsonConvert.DeserializeObject<List<PersonDTO>>(responseData.ToString());
+            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var personDTO in personDTOList)
+            foreach (var PersonViewModel in PersonViewModelList)
             {
-                personDTO.Score.Should().Be(AppSettings.IncomeMinScore);
+                PersonViewModel.Score.Should().Be(AppSettings.IncomeMinScore);
             }
         }
 
@@ -85,13 +84,13 @@ namespace Challenge.API.Tests
             //Act
             var response = await _client.PostAsJsonAsync(uri, personViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var personDTOList = JsonConvert.DeserializeObject<List<PersonDTO>>(responseData.ToString());
+            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var personDTO in personDTOList)
+            foreach (var PersonViewModel in PersonViewModelList)
             {
-                personDTO.Score.Should().Be(AppSettings.IncomeMinScore + AppSettings.OneOrTwoDependentsScore);
+                PersonViewModel.Score.Should().Be(AppSettings.IncomeMinScore + AppSettings.OneOrTwoDependentsScore);
             }
         }
 
@@ -133,13 +132,13 @@ namespace Challenge.API.Tests
             //Act
             var response = await _client.PostAsJsonAsync(uri, personViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var personDTOList = JsonConvert.DeserializeObject<List<PersonDTO>>(responseData.ToString());
+            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var personDTO in personDTOList)
+            foreach (var PersonViewModel in PersonViewModelList)
             {
-                personDTO.Score.Should().Be(AppSettings.IncomeMinScore + AppSettings.OneOrTwoDependentsScore);
+                PersonViewModel.Score.Should().Be(AppSettings.IncomeMinScore + AppSettings.OneOrTwoDependentsScore);
             }
         }
 
@@ -189,13 +188,13 @@ namespace Challenge.API.Tests
             //Act
             var response = await _client.PostAsJsonAsync(uri, personViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var personDTOList = JsonConvert.DeserializeObject<List<PersonDTO>>(responseData.ToString());
+            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var personDTO in personDTOList)
+            foreach (var PersonViewModel in PersonViewModelList)
             {
-                personDTO.Score.Should().Be(AppSettings.IncomeMinScore + AppSettings.ThreeOrMoreDependentsScore);
+                PersonViewModel.Score.Should().Be(AppSettings.IncomeMinScore + AppSettings.ThreeOrMoreDependentsScore);
             }
         }
 
@@ -218,13 +217,13 @@ namespace Challenge.API.Tests
             //Act
             var response = await _client.PostAsJsonAsync(uri, personViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var personDTOList = JsonConvert.DeserializeObject<List<PersonDTO>>(responseData.ToString());
+            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var personDTO in personDTOList)
+            foreach (var PersonViewModel in PersonViewModelList)
             {
-                personDTO.Score.Should().Be(AppSettings.IncomeMaxScore);
+                PersonViewModel.Score.Should().Be(AppSettings.IncomeMaxScore);
             }
         }
 
@@ -256,13 +255,13 @@ namespace Challenge.API.Tests
             //Act
             var response = await _client.PostAsJsonAsync(uri, personViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var personDTOList = JsonConvert.DeserializeObject<List<PersonDTO>>(responseData.ToString());
+            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var personDTO in personDTOList)
+            foreach (var PersonViewModel in PersonViewModelList)
             {
-                personDTO.Score.Should().Be(AppSettings.IncomeMaxScore + AppSettings.OneOrTwoDependentsScore);
+                PersonViewModel.Score.Should().Be(AppSettings.IncomeMaxScore + AppSettings.OneOrTwoDependentsScore);
             }
         }
 
@@ -304,13 +303,13 @@ namespace Challenge.API.Tests
             //Act
             var response = await _client.PostAsJsonAsync(uri, personViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var personDTOList = JsonConvert.DeserializeObject<List<PersonDTO>>(responseData.ToString());
+            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var personDTO in personDTOList)
+            foreach (var PersonViewModel in PersonViewModelList)
             {
-                personDTO.Score.Should().Be(AppSettings.IncomeMaxScore + AppSettings.OneOrTwoDependentsScore);
+                PersonViewModel.Score.Should().Be(AppSettings.IncomeMaxScore + AppSettings.OneOrTwoDependentsScore);
             }
         }
 
@@ -360,13 +359,13 @@ namespace Challenge.API.Tests
             //Act
             var response = await _client.PostAsJsonAsync(uri, personViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var personDTOList = JsonConvert.DeserializeObject<List<PersonDTO>>(responseData.ToString());
+            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var personDTO in personDTOList)
+            foreach (var PersonViewModel in PersonViewModelList)
             {
-                personDTO.Score.Should().Be(AppSettings.IncomeMaxScore + AppSettings.ThreeOrMoreDependentsScore);
+                PersonViewModel.Score.Should().Be(AppSettings.IncomeMaxScore + AppSettings.ThreeOrMoreDependentsScore);
             }
         }
 
@@ -394,13 +393,13 @@ namespace Challenge.API.Tests
             //Act
             var response = await _client.PostAsJsonAsync(uri, personViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var personDTOList = JsonConvert.DeserializeObject<List<PersonDTO>>(responseData.ToString());
+            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var personDTO in personDTOList)
+            foreach (var PersonViewModel in PersonViewModelList)
             {
-                personDTO.Score.Should().Be(AppSettings.IncomeMinScore);
+                PersonViewModel.Score.Should().Be(AppSettings.IncomeMinScore);
             }
         }
 
@@ -437,13 +436,13 @@ namespace Challenge.API.Tests
             //Act
             var response = await _client.PostAsJsonAsync(uri, personViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var personDTOList = JsonConvert.DeserializeObject<List<PersonDTO>>(responseData.ToString());
+            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var personDTO in personDTOList)
+            foreach (var PersonViewModel in PersonViewModelList)
             {
-                personDTO.Score.Should().Be(AppSettings.IncomeMinScore + AppSettings.OneOrTwoDependentsScore);
+                PersonViewModel.Score.Should().Be(AppSettings.IncomeMinScore + AppSettings.OneOrTwoDependentsScore);
             }
         }
 
@@ -490,13 +489,13 @@ namespace Challenge.API.Tests
             //Act
             var response = await _client.PostAsJsonAsync(uri, personViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var personDTOList = JsonConvert.DeserializeObject<List<PersonDTO>>(responseData.ToString());
+            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var personDTO in personDTOList)
+            foreach (var PersonViewModel in PersonViewModelList)
             {
-                personDTO.Score.Should().Be(AppSettings.IncomeMinScore + AppSettings.OneOrTwoDependentsScore);
+                PersonViewModel.Score.Should().Be(AppSettings.IncomeMinScore + AppSettings.OneOrTwoDependentsScore);
             }
         }
 
@@ -551,13 +550,13 @@ namespace Challenge.API.Tests
             //Act
             var response = await _client.PostAsJsonAsync(uri, personViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var personDTOList = JsonConvert.DeserializeObject<List<PersonDTO>>(responseData.ToString());
+            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var personDTO in personDTOList)
+            foreach (var PersonViewModel in PersonViewModelList)
             {
-                personDTO.Score.Should().Be(AppSettings.IncomeMinScore + AppSettings.ThreeOrMoreDependentsScore);
+                PersonViewModel.Score.Should().Be(AppSettings.IncomeMinScore + AppSettings.ThreeOrMoreDependentsScore);
             }
         }
 
@@ -585,13 +584,13 @@ namespace Challenge.API.Tests
             //Act
             var response = await _client.PostAsJsonAsync(uri, personViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var personDTOList = JsonConvert.DeserializeObject<List<PersonDTO>>(responseData.ToString());
+            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var personDTO in personDTOList)
+            foreach (var PersonViewModel in PersonViewModelList)
             {
-                personDTO.Score.Should().Be(AppSettings.IncomeMaxScore);
+                PersonViewModel.Score.Should().Be(AppSettings.IncomeMaxScore);
             }
         }
 
@@ -628,13 +627,13 @@ namespace Challenge.API.Tests
             //Act
             var response = await _client.PostAsJsonAsync(uri, personViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var personDTOList = JsonConvert.DeserializeObject<List<PersonDTO>>(responseData.ToString());
+            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var personDTO in personDTOList)
+            foreach (var PersonViewModel in PersonViewModelList)
             {
-                personDTO.Score.Should().Be(AppSettings.IncomeMaxScore + AppSettings.OneOrTwoDependentsScore);
+                PersonViewModel.Score.Should().Be(AppSettings.IncomeMaxScore + AppSettings.OneOrTwoDependentsScore);
             }
         }
 
@@ -681,13 +680,13 @@ namespace Challenge.API.Tests
             //Act
             var response = await _client.PostAsJsonAsync(uri, personViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var personDTOList = JsonConvert.DeserializeObject<List<PersonDTO>>(responseData.ToString());
+            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var personDTO in personDTOList)
+            foreach (var PersonViewModel in PersonViewModelList)
             {
-                personDTO.Score.Should().Be(AppSettings.IncomeMaxScore + AppSettings.OneOrTwoDependentsScore);
+                PersonViewModel.Score.Should().Be(AppSettings.IncomeMaxScore + AppSettings.OneOrTwoDependentsScore);
             }
         }
 
@@ -742,13 +741,13 @@ namespace Challenge.API.Tests
             //Act
             var response = await _client.PostAsJsonAsync(uri, personViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var personDTOList = JsonConvert.DeserializeObject<List<PersonDTO>>(responseData.ToString());
+            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var personDTO in personDTOList)
+            foreach (var PersonViewModel in PersonViewModelList)
             {
-                personDTO.Score.Should().Be(AppSettings.IncomeMaxScore + AppSettings.ThreeOrMoreDependentsScore);
+                PersonViewModel.Score.Should().Be(AppSettings.IncomeMaxScore + AppSettings.ThreeOrMoreDependentsScore);
             }
         }
 
@@ -803,13 +802,13 @@ namespace Challenge.API.Tests
             //Act
             var response = await _client.PostAsJsonAsync(uri, personViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var personDTOList = JsonConvert.DeserializeObject<List<PersonDTO>>(responseData.ToString());
+            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var personDTO in personDTOList)
+            foreach (var PersonViewModel in PersonViewModelList)
             {
-                personDTO.Score.Should().Be(0);
+                PersonViewModel.Score.Should().Be(0);
             }
         }
 
@@ -1187,13 +1186,13 @@ namespace Challenge.API.Tests
             //Act
             var response = await _client.PostAsJsonAsync(uri, personViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var personDTOList = JsonConvert.DeserializeObject<List<PersonDTO>>(responseData.ToString());
+            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            foreach (var personDTO in personDTOList)
+            foreach (var PersonViewModel in PersonViewModelList)
             {
-                personDTO.Score.Should().Be(AppSettings.IncomeMinScore);
+                PersonViewModel.Score.Should().Be(AppSettings.IncomeMinScore);
             }
         }
 
@@ -1346,15 +1345,15 @@ namespace Challenge.API.Tests
             //Act
             var response = await _client.PostAsJsonAsync(uri, personViewModelList);
             var responseData = JObject.Parse(await response.Content.ReadAsStringAsync()).GetValue("data");
-            var personDTOList = JsonConvert.DeserializeObject<List<PersonDTO>>(responseData.ToString());
+            var PersonViewModelList = JsonConvert.DeserializeObject<List<PersonViewModel>>(responseData.ToString());
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var control = 7;
 
-            foreach (var personDTO in personDTOList)
+            foreach (var PersonViewModel in PersonViewModelList)
             {
-                personDTO.Score.Should().Be(control);
+                PersonViewModel.Score.Should().Be(control);
                 control -= 2;
             }
         }

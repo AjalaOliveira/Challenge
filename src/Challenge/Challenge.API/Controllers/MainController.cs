@@ -1,7 +1,10 @@
-﻿using Challenge.Business.Interfaces;
+﻿using AutoMapper;
+using Challenge.API.ViewModels;
+using Challenge.Business.Interfaces;
 using Challenge.Business.Notifications;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Challenge.API.Controllers
@@ -10,10 +13,12 @@ namespace Challenge.API.Controllers
     public abstract class MainController : ControllerBase
     {
         private readonly INotificator _notificator;
+        public readonly IMapper _mapper;
 
-        protected MainController(INotificator notificator)
+        protected MainController(INotificator notificator, IMapper mapper)
         {
             _notificator = notificator;
+            _mapper = mapper;
         }
 
         protected bool IsValidOperation()
@@ -28,7 +33,7 @@ namespace Challenge.API.Controllers
                 return Ok(new
                 {
                     success = true,
-                    data = result
+                    data = _mapper.Map<List<PersonViewModel>>(result)
                 });
             }
 

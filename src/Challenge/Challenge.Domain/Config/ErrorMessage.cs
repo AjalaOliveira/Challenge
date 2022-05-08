@@ -2,11 +2,11 @@
 {
     public static class ErrorMessage
     {
-        public const string FullNameError = "O campo 'nomeCompleto' é obrigatório!";
-        public const string DocumentError = "O campo 'numeroDocumento' é obrigatório!";
-        public const string BirthDateError = "O campo 'dataNascimento' é obrigatório!";
-        public const string TotalIncomeError = "O campo 'rendaFamiliar' é obrigatório!";
-        public const string FamilyDataError = "O campo 'dadosFamilia' é obrigatório!";
+        public const string FullNameError = "O campo 'fullName' é obrigatório!";
+        public const string DocumentError = "O campo 'document' é obrigatório!";
+        public const string BirthDateError = "O campo 'birthDate' é obrigatório!";
+        public const string TotalIncomeError = "O campo 'totalIncome' é obrigatório!";
+        public const string FamilyDataError = "O campo 'familyData' é obrigatório!";
 
         public static string FamilyAlreadyHasApplicantError(string applicantFullName)
         {

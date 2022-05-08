@@ -15,14 +15,12 @@ namespace Challenge.API.V1
     public class PeopleController : MainController
     {
         private readonly IPeopleService _peopleService;
-        private readonly IMapper _mapper;
 
         public PeopleController(INotificator notificator,
-                                IPeopleService peopleService,
-                                IMapper mapper) : base(notificator)
+                                IMapper mapper,
+                                IPeopleService peopleService) : base(notificator, mapper)
         {
             _peopleService = peopleService;
-            _mapper = mapper;
         }
 
         [ActionName("SortListOfPeople")]
