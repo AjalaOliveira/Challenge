@@ -16,6 +16,9 @@ Uma família sempre possuirá um único pretendente e um único cônjuge.
 ### Resultado
 O resultado esperado é que as famílias, na listagem, estejam pontuadas de acordo com os critérios que foram atendidos (cada família pode pontuar uma única vez por critério, além de poder atender todos os critérios ou nenhum deles) e ordenadas pela pontuação, favorecendo as famílias melhores pontuadas.
 
+### Rota - POST
+
+/People/v1.0/SortListOfPeople
 
 ### Exemplo de Request JSON
 ```json
